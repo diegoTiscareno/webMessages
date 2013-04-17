@@ -34,12 +34,12 @@ public class MysqlWizard {
     public ResultSet query(String query) throws Exception {
         if (connection == null) {
             if (!connect()) {
-                throw new Exception("Connection refused");
+                throw new ConnectionException("Connection refused");
             }
         } else {
                 if (connection.isClosed()) {
                     if (!connect()) {
-                    throw new Exception("Connection refused");
+                    throw new ConnectionException("Connection refused");
                 }
             }
         }
@@ -47,6 +47,23 @@ public class MysqlWizard {
         ResultSet result = statement.executeQuery(query);
         return result;
     }
+    
+    public int update(String query) throws Exception {
+        if (connection == null) {
+            if (!connect()) {
+                throw new ConnectionException("Connection refused");
+            }
+        } else {
+                if (connection.isClosed()) {
+                    if (!connect()) {
+                    throw new ConnectionException("Connection refused");
+                }
+            }
+        }
+        statement = connection.createStatement();
+        return statement.executeUpdate(query);
+    }
+    
     
     public boolean closeResultSet(ResultSet result) {
         try {
